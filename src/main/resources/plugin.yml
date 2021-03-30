@@ -1,0 +1,14 @@
+name: CustomEnchantments
+version: 1.0
+main: shittysituations.customenchantments.Main
+api-version: 1.16
+prefix: Custom Enchantments
+authors: [ AshleyDavage ]
+description: A plugin that adds custom enchantments to the game.
+commands:
+  enchant:
+    description: Enchants the item you are currently holding!
+    usage: /enchant smelt|vacuum|dash|flight|cockatrice
+  chickens:
+    description: Displays how many chickens have died!
+    usage: /chickens

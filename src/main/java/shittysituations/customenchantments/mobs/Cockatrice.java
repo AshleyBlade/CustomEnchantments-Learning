@@ -20,7 +20,9 @@ public class Cockatrice extends EntityChicken{
 
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityMonster.class, true));
         //this.goalSelector.a(1, new PathfinderGoalMoveTowardsTarget(this, 1, 1));
-        this.goalSelector.a(1, new PathfinderGoalCockatrice(this, 1.2, 20, 3)); // sets the cockatrice goal to custom pathfinder
+        this.goalSelector.a(1, new PathfinderGoalCockatrice(this, 1.2, 2, 3)); // sets the cockatrice goal to custom pathfinder
+        this.goalSelector.a(2, new PathfinderGoalRandomStrollLand(this, 1.2D));
+        this.goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
     }
 
     @Override

@@ -6,6 +6,8 @@ import org.bukkit.World;
 
 import java.util.EnumSet;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class PathfinderGoalCockatrice extends PathfinderGoal {
 
     private final EntityInsentient cockatrice; // Cockatrice
@@ -34,12 +36,11 @@ public class PathfinderGoalCockatrice extends PathfinderGoal {
     public boolean a() { // runs every tick
         // Starts pathfinding goal if it is true
         this.target = this.cockatrice.getGoalTarget(); // Get the goal target from the Cockatrice Entity
-        if (this.target == null) // if target == null return false
+        if (this.target == null) {// if target == null return false
             return false;
-        else if (this.cockatrice.getDisplayName() == null){ // it target doesn't have a displayname return false
+        }else if (this.cockatrice.getDisplayName() == null){ // it target doesn't have a displayname return false
             return false;
         } else{// Follow target
-
             // Fuck knows
             Vec3D vec = RandomPositionGenerator.a((EntityCreature) cockatrice, 16, 7, this.target.getPositionVector());
             if(vec == null) // Checks if target? is in the air
@@ -53,29 +54,24 @@ public class PathfinderGoalCockatrice extends PathfinderGoal {
         }
     }
 
+    @Override
     public void c() { // runs after a()
         // navigates cockatrice to target!
         this.cockatrice.getNavigation().a(this.x, this.y, this.z, this.speed);
     }
 
+    @Override
     public boolean b() { // runs after c()
-        // if false runs d -> if true continue navigating to target
-
-        if(!(this.cockatrice.getNavigation().m() && this.target.h(this.cockatrice) < (double) (this.distance * this.distance))) return false;
-
-        // true
-        //getLogger().info("Cockatrice should be killed!");
+        // if the target is not within distance -> continue navigating to the target.
+        if(!(this.cockatrice.getNavigation().m() && this.target.h(this.cockatrice) < (double) (this.distance * this.distance))){
+            return false;
+        };
 
         World world = cockatrice.getWorld().getWorld(); // Get the world
         Location cockatriceLoc = new Location(world, cockatrice.locX(), cockatrice.locY(), cockatrice.locZ()); // get cockatrice location
         world.createExplosion(cockatriceLoc, this.blastRadius, false, false); // create explosion at location
-
         cockatrice.die();
 
         return true;
-    }
-
-    public void d() { // runs if b = false
-        this.target = null;
     }
 }

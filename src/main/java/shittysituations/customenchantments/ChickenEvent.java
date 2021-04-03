@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -87,5 +88,13 @@ public class ChickenEvent implements Listener {
         if(!((random.nextInt(1000) + 1) == 1 )) return; // if the integer isn't 1 | 10% chance
 
         applyCockatriceEnchantment(item, player);
+    }
+
+    @EventHandler
+    public void onChickenExplode(EntityDeathEvent event){
+        if(!event.getEntity().getType().equals(EntityType.CHICKEN)) return;
+        if(event.getEntity().getCustomName() == null) return;
+        if(!(event.getEntity().getCustomName().contains("Cockatrice"))) return;
+        event.getDrops().clear();
     }
 }

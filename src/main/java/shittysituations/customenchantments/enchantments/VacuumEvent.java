@@ -13,6 +13,8 @@ import shittysituations.customenchantments.CustomEnchants;
 
 import java.util.Collection;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class VacuumEvent implements Listener {
 
     @EventHandler
@@ -36,6 +38,18 @@ public class VacuumEvent implements Listener {
                 case NETHER_GOLD_ORE:
                 case ANCIENT_DEBRIS:
                 case GOLD_ORE:
+                case ACACIA_LOG:
+                case BIRCH_LOG:
+                case DARK_OAK_LOG:
+                case JUNGLE_LOG:
+                case OAK_LOG:
+                case SPRUCE_LOG:
+                case STRIPPED_ACACIA_LOG:
+                case STRIPPED_BIRCH_LOG:
+                case STRIPPED_DARK_OAK_LOG:
+                case STRIPPED_JUNGLE_LOG:
+                case STRIPPED_OAK_LOG:
+                case STRIPPED_SPRUCE_LOG:
                     return;
                 default:
                     break;

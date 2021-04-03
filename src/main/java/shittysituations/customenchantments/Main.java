@@ -41,7 +41,7 @@ public final class Main extends JavaPlugin{
         this.getServer().getPluginManager().registerEvents(new VacuumEvent(), this);
         // Smelt enchantment function
         this.getServer().getPluginManager().registerEvents(new SmeltEvent(), this);
-        // Gambler enchantment
+        // Gambler enchantment -> NEEDS Balancing
         this.getServer().getPluginManager().registerEvents(new GamblerEvent(), this);
 
         // Dash enchantment function

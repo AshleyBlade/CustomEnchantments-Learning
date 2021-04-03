@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import shittysituations.customenchantments.Main;
 
 import static org.bukkit.Bukkit.getLogger;
-import static shittysituations.customenchantments.ChickenEvent.deaths;
 
 public class ChickenDeaths implements CommandExecutor {
 

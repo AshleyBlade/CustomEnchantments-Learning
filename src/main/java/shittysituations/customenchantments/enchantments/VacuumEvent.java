@@ -1,4 +1,4 @@
-package shittysituations.customenchantments;
+package shittysituations.customenchantments.enchantments;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import shittysituations.customenchantments.CustomEnchants;
 
 import java.util.Collection;
 

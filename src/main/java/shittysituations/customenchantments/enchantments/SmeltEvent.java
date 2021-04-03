@@ -1,16 +1,16 @@
-package shittysituations.customenchantments;
+package shittysituations.customenchantments.enchantments;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import shittysituations.customenchantments.CustomEnchants;
 
 public class SmeltEvent implements Listener {
 
@@ -67,7 +67,7 @@ public class SmeltEvent implements Listener {
         }
 
         Location loc = block.getLocation();
-        block.getWorld().dropItem(loc, drop);
+        block.getWorld().dropItemNaturally(loc, drop);
 
     }
 }

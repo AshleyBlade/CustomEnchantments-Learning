@@ -1,4 +1,4 @@
-package shittysituations.customenchantments;
+package shittysituations.customenchantments.enchantments;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import shittysituations.customenchantments.CustomEnchants;
 
 import java.util.HashMap;
 

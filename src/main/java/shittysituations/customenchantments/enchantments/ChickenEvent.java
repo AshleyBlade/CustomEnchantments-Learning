@@ -1,4 +1,4 @@
-package shittysituations.customenchantments;
+package shittysituations.customenchantments.enchantments;
 
 import net.minecraft.server.v1_16_R3.WorldServer;
 import org.bukkit.Location;
@@ -15,12 +15,14 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import shittysituations.customenchantments.CustomEnchants;
+import shittysituations.customenchantments.Main;
 import shittysituations.customenchantments.mobs.Cockatrice;
 
 import java.util.HashMap;
 import java.util.Random;
 
-import static shittysituations.customenchantments.commands.Enchant.applyCockatriceEnchantment;
+import static shittysituations.customenchantments.commands.Enchant.applyEnchantment;
 
 public class ChickenEvent implements Listener {
 
@@ -71,7 +73,7 @@ public class ChickenEvent implements Listener {
         if(!event.getEntity().getType().equals(EntityType.CHICKEN)) return; // If not a chicken return
         if(!(event.getDamager() instanceof Player)) return; // check if didn't die to player
 
-        plugin.getDeathsConfig().set("deaths.chickens", (plugin.getDeathsConfig().getInt("deaths.chickens") + 1)); ;
+        plugin.getDeathsConfig().set("deaths.chickens", (plugin.getDeathsConfig().getInt("deaths.chickens") + 1));
         try{
             plugin.getDeathsConfig().save(plugin.getDeathsFile());
         } catch(Exception err){
@@ -87,7 +89,7 @@ public class ChickenEvent implements Listener {
 
         if(!((random.nextInt(1000) + 1) == 1 )) return; // if the integer isn't 1 | 10% chance
 
-        applyCockatriceEnchantment(item, player);
+        applyEnchantment(item, player, "cockatrice");
     }
 
     @EventHandler

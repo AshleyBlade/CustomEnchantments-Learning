@@ -1,13 +1,12 @@
 package shittysituations.customenchantments.commands;
 
+import com.sun.istack.internal.NotNull;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import shittysituations.customenchantments.CustomEnchants;
 
@@ -17,54 +16,34 @@ public class Enchant implements CommandExecutor {
 
     // Commands
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, String label, @NotNull String[] args){
         if(label.equalsIgnoreCase("enchant")){
             if(!(sender instanceof Player)) return true;
             if(args.length == 0) return true;
             Player player = (Player) sender;
+
+            if(getPlayerItem(player) == null) {
+                player.sendMessage("You need to have an item in your hand!");
+                return true;
+            }
+
             if(args[0].equalsIgnoreCase("vacuum")){
 
                 ItemStack item = getPlayerItem(player); // get the player's item
-                if(item == null) player.sendMessage("You need an item in your hand to apply this enchantment!"); // send a message to the player if they don't have an item
+                if(!item.getType().name().contains("AXE")) return true;
+                applyEnchantment(item, player, "vacuum");
 
-                player.getInventory().removeItem(item); // Remove the item the player is enchanting
-
-                item.addUnsafeEnchantment(CustomEnchants.VACUUM, 1); // add smelt to item meta
-                ItemMeta meta = item.getItemMeta(); // get the current ItemStack meta
-                ArrayList<String> lore = new ArrayList<>(); // create lore arraylist
-                lore.add(ChatColor.GRAY + "Vacuum I"); // add lore for the custom enchant
-
-                if(meta.hasLore()) // check if the item has lore
-                    for(String l : meta.getLore()) // iterate through the old lore
-                        lore.add(l); // add old lore to the new lore
-
-                meta.setLore(lore); // sets the lore new lore
-                item.setItemMeta(meta); // sets the new meta
-
-                player.getInventory().addItem(item); // add item back to the player's inventory
                 return true;
             } else if(args[0].equalsIgnoreCase("smelt")){
 
                 ItemStack item = getPlayerItem(player);
                 if(!item.getType().name().contains("AXE")) {
-                    player.sendMessage("This can only be applied to axes and pickaxes!");
+                    player.sendMessage("This can only be applied to Axes and pickaxes!");
                     return true;
                 }
 
-                player.getInventory().removeItem(item);
+                applyEnchantment(item, player, "smelt");
 
-                item.addUnsafeEnchantment(CustomEnchants.SMELT, 1);
-                ItemMeta meta = item.getItemMeta();
-                ArrayList<String> lore = new ArrayList<>();
-                lore.add(ChatColor.GRAY + "Smelt I");
-
-                if(meta.hasLore())
-                    for(String l : meta.getLore())
-                        lore.add(l);
-                meta.setLore(lore);
-                item.setItemMeta(meta);
-
-                player.getInventory().addItem(item);
                 return true;
             } else if(args[0].equalsIgnoreCase("dash")) {
 
@@ -73,41 +52,20 @@ public class Enchant implements CommandExecutor {
                     player.sendMessage("This can only be applied to a sword!");
                     return true;
                 }
-                player.getInventory().removeItem(item);
 
-                item.addUnsafeEnchantment(CustomEnchants.DASH, 1);
-                ItemMeta meta = item.getItemMeta();
-                ArrayList<String> lore = new ArrayList<>();
-                lore.add(ChatColor.GRAY + "Dash I");
+                applyEnchantment(item, player, "dash");
 
-                if(meta.hasLore())
-                    for(String l : meta.getLore())
-                        lore.add(l);
-                meta.setLore(lore);
-                item.setItemMeta(meta);
-
-                player.getInventory().addItem(item);
                 return true;
-            } else if(args[0].equalsIgnoreCase("flight")){
+            } else if(args[0].equalsIgnoreCase("gambler")) {
 
-                ItemStack item = player.getInventory().getItemInOffHand(); // Get item in offhand
-                if(!(item.getType().equals(Material.TRIPWIRE_HOOK))) {
-                    player.sendMessage("This can only be applied to a tripwire hook!");
-                }; // if no tripwire hook return
-                player.getInventory().removeItem(item); // remove the old item from the player
+                ItemStack item = getPlayerItem(player);
+                if (!item.getType().name().contains("PICKAXE")) {
+                    player.sendMessage("This can only be applied to a Pickaxe");
+                    return true;
+                }
 
-                item.addUnsafeEnchantment(CustomEnchants.FLIGHT, 1); // Add Flight enchant
-                ItemMeta meta = item.getItemMeta(); // Create item meta
-                ArrayList<String> lore = new ArrayList<>(); // Create item lore
-                lore.add(ChatColor.GRAY + "Flight I"); // add to the lore
+                applyEnchantment(item, player, "gambler");
 
-                if(meta.hasLore())
-                    for(String l : meta.getLore())
-                        lore.add(l);
-                meta.setLore(lore);
-                item.setItemMeta(meta);
-
-                player.getInventory().addItem(item);
                 return true;
             } else if(args[0].equalsIgnoreCase("cockatrice")) { // WORKS
 
@@ -117,7 +75,7 @@ public class Enchant implements CommandExecutor {
                     return true;
                 }
 
-                applyCockatriceEnchantment(item, player);
+                applyEnchantment(item, player, "cockatrice");
 
                 return true;
             }
@@ -136,26 +94,41 @@ public class Enchant implements CommandExecutor {
         return item;
     }
 
-    public static void applyCockatriceEnchantment(ItemStack item, Player player) {
-        player.getInventory().removeItem(item); // remove the old item from the player
+    public static void applyEnchantment(ItemStack item, Player player, String enchant){
+        player.getInventory().removeItem(item); // Delete item from player's inventory
 
-        item.addUnsafeEnchantment(CustomEnchants.COCKATRICE, 1); // add Crazy Chickens enchantment to item
-        ItemMeta meta = item.getItemMeta(); // get Itemmeta
+        ArrayList<String> lore = new ArrayList<>(); // Create new arraylist for Lore
+        switch(enchant){
+            case "cockatrice": // if enchant == cockatrice
+                item.addUnsafeEnchantment(CustomEnchants.COCKATRICE, 1); // Add cockatrice enchant
+                lore.add(ChatColor.GRAY + "Cockatrice I"); // Add cockatrice lore
+                break;
+            case "dash": // if enchant == dash
+                item.addUnsafeEnchantment(CustomEnchants.DASH, 1); // Add dash enchant
+                lore.add(ChatColor.GRAY + "Dash I"); // Add dash lore
+                break;
+            case "vacuum": // if enchant == vacuum
+                item.addUnsafeEnchantment(CustomEnchants.VACUUM, 1); // Add vacuum enchant
+                lore.add(ChatColor.GRAY + "Vacuum I"); // Add vacuum lore
+                break;
+            case "smelt": // if enchant == smelt
+                item.addUnsafeEnchantment(CustomEnchants.SMELT, 1); // Add smelt enchant
+                lore.add(ChatColor.GRAY + "Smelt I"); // Add smelt lore
+                break;
+            case "gambler": // if enchant == gambler
+                item.addUnsafeEnchantment(CustomEnchants.GAMBLER, 1); // Add gambler enchant
+                lore.add(ChatColor.GRAY + "Gambler I"); // Add gambler lore
+                break;
+        }
 
+        ItemMeta meta = item.getItemMeta(); // get the item's meta and store it as meta
 
-        Damageable damage = (Damageable) meta;
-        damage.setDamage(0);
-        meta = (ItemMeta) damage;
+        if(meta.hasLore()) // if the meta has lore
+            for(String l : meta.getLore()) // iterate through lore
+                lore.add(l); // add old lore to new lore arraylist
+        meta.setLore(lore); // set the new lore in the meta
+        item.setItemMeta(meta); // set the meta to the item
 
-        ArrayList<String> lore = new ArrayList<>(); // create lore arraylist
-        lore.add(ChatColor.GRAY + "Cockatrice I"); // add enchantment lore to the item
-
-        if(meta.hasLore()) // check if the item has a lore
-            for(String l : meta.getLore()) // iterate through the lore
-                lore.add(l); // add the old lore to the new lore
-        meta.setLore(lore); // set the new lore to the item meta
-        item.setItemMeta(meta); // set the new item meta to the item
-
-        player.getInventory().addItem(item); // give the item back to the player
+        player.getInventory().addItem(item); // add the item back to the player's inventory
     }
 }

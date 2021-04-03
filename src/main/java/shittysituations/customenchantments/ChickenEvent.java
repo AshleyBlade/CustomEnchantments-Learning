@@ -20,7 +20,7 @@ import shittysituations.customenchantments.mobs.Cockatrice;
 import java.util.HashMap;
 import java.util.Random;
 
-import static shittysituations.customenchantments.Main.applyCockatriceEnchantment;
+import static shittysituations.customenchantments.commands.Enchant.applyCockatriceEnchantment;
 
 public class ChickenEvent implements Listener {
 

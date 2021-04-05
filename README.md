@@ -26,4 +26,4 @@ Improvements being worked on:
     Config support to change the odds of effects occuring, e.g. Gambler
     Balancing and testing in a standard survival world.
 
-Built JAR: https://dl.drive.google.com/file/d/1_-48X2wwYO6dBZLS7tahfe3RwX8JEFm-/view
+Built JAR: https://drive.google.com/file/d/1EeQAyUxohbCVkdlwtfU_Fb0vu1XQT8hd/view?usp=sharing

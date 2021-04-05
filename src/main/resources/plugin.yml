@@ -12,3 +12,6 @@ commands:
   chickens:
     description: Displays how many chickens have died!
     usage: /chickens
+  enchants:
+    description: Opens the Enchantment GUI
+    usage: /enchants

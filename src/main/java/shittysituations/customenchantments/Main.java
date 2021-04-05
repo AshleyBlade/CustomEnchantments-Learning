@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import shittysituations.customenchantments.commands.ChickenDeaths;
 import shittysituations.customenchantments.commands.Enchant;
 import shittysituations.customenchantments.enchantments.*;
+import shittysituations.customenchantments.gui.EnchantGUI;
 
 import java.io.File;
 
@@ -35,6 +36,7 @@ public final class Main extends JavaPlugin{
         // Register commands
         getCommand("chickens").setExecutor(new ChickenDeaths(this));
         getCommand("enchant").setExecutor(new Enchant());
+        getCommand("enchants").setExecutor(new EnchantGUI());
 
         // Pickaxe Enchants
         // Vacuum enchantment function
@@ -49,6 +51,7 @@ public final class Main extends JavaPlugin{
         // CrazyChickens enchantment function
         this.getServer().getPluginManager().registerEvents(new ChickenEvent(this), this);
 
+        this.getServer().getPluginManager().registerEvents(new EnchantGUI(), this);
     }
 
     @Override

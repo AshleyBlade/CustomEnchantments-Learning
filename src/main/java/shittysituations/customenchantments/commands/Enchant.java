@@ -1,6 +1,5 @@
 package shittysituations.customenchantments.commands;
 
-import com.sun.istack.internal.NotNull;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,12 +10,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import shittysituations.customenchantments.CustomEnchants;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Enchant implements CommandExecutor {
 
     // Commands
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, String label, @NotNull String[] args){
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
         if(label.equalsIgnoreCase("enchant")){
             if(!(sender instanceof Player)) return true;
             if(args.length == 0) return true;

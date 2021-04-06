@@ -33,8 +33,7 @@ public class DashEvent implements Listener {
             // player is in hashmap
             Long storedTime = cooldowns.get(player.getName()); // store the remaining time
             if (storedTime > System.currentTimeMillis()){ // if storedTime is greater than current time, they have to wait longer
-                Long timeleft = (storedTime - System.currentTimeMillis()) / 1000; // store the timeleft to display to the player
-                player.sendMessage(timeleft + " seconds until next Dash!"); // send a message to the player if they are on cooldown; with remaining time.
+                player.sendMessage("Please wait before dashing again!"); // send a message to the player if they are on cooldown.
                 return;
             }
         }

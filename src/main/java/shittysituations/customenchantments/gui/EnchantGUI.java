@@ -25,14 +25,43 @@ public class EnchantGUI implements CommandExecutor, Listener {
 
     public EnchantGUI() {
         // creates new inventory and stores it.
-        inventory = Bukkit.createInventory(null, 27, "Enchantment");
+        inventory = Bukkit.createInventory(null, 45, "Enchantment");
 
         initialiseItems(); //
     }
 
     public void initialiseItems(){
-        inventory.addItem(createGuiItem(Material.FEATHER, "Cockatrice", "Summons a Cockatrice when right-clicking!", "Can be applied to an axe or a sword"));
-        inventory.addItem(createGuiItem(Material.POTION, "Dash", "Dashes forwards when you right-click!", "Can be applied to a sword"));
+        createGuiBorder(Material.CYAN_STAINED_GLASS_PANE);
+
+        ItemStack vacuum = createGuiItem(Material.HOPPER, "Vacuum","Places broken blocks into your inventory", "Can only be applied to pickaxes and axes.");
+        ItemStack cockatrice = createGuiItem(Material.EGG, "Cockatrice", "Summons a Cockatrice when right-clicking!", "Can be applied to an axe or a sword.");
+        ItemStack dash = createGuiItem(Material.POTION, "Dash", "Dashes forwards when you right-click!", "Can be applied to a sword.");
+        ItemStack gambler = createGuiItem(Material.DIAMOND_ORE, "Gambler", "You may get more ore less, when breaking ores!", "Can only be applied to a pickaxe.");
+        ItemStack smelt = createGuiItem(Material.FURNACE, "Smelt", "Auto-smelts ores when breaking them", "Can only be applied to pickaxes and axes.");
+
+        inventory.setItem(20, vacuum);
+        inventory.setItem(21, cockatrice);
+        inventory.setItem(22, dash);
+        inventory.setItem(23, gambler);
+        inventory.setItem(24, smelt);
+    }
+
+    protected void createGuiBorder(final Material border){
+        ItemStack item = createGuiItem(border, " ", " ");
+        // for every slot in top row
+        for (int i = 0; i < 9; i++){
+            inventory.setItem(i, item);
+        }
+        // for every slot in bottom row
+        for(int i = 36; i < 45; i++){
+            inventory.setItem(i, item);
+        }
+        // if slot % 9 = 8 it is right side; if slot % 9 = 0 it is left side;
+        for(int i = 0; i < 45; i++){
+            if(i % 9 == 8 || i % 9 == 0){
+                inventory.setItem(i, item);
+            }
+        }
     }
 
     protected ItemStack createGuiItem(final Material material, final String name, final String... lore){
@@ -70,13 +99,14 @@ public class EnchantGUI implements CommandExecutor, Listener {
         ItemStack clickedItem = event.getCurrentItem(); // store the clicked item
         if(clickedItem == null || clickedItem.getType().equals(Material.AIR)) return; // check if the item is null or air blocks
         if(!(clickedItem.getItemMeta().hasDisplayName())) return; // if the item doesn't have a display name return -> should always have a display name at this point
+        if(clickedItem.getItemMeta().getDisplayName().equals(" ")) return;
         String enchant = clickedItem.getItemMeta().getDisplayName().toLowerCase(); // store the display name of the enchant to a lowercase string
 
+        if(event.getWhoClicked().getInventory().getItemInMainHand().getType().equals(Material.AIR)) return;
         ItemStack mainItem = event.getWhoClicked().getInventory().getItemInMainHand(); // store the player's main hand item -> this is what will be enchanted
         Enchant.applyEnchantment(mainItem, (Player) event.getWhoClicked(), enchant); // apply the enchant to the weapon.
 
         // Add extra functionality here -> enchantment cost or something
-
 
         event.getWhoClicked().closeInventory(); // close the inventory after player clicks
     }

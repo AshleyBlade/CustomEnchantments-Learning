@@ -1,7 +1,6 @@
 package shittysituations.customenchantments.enchantments;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -10,9 +9,22 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import shittysituations.customenchantments.CustomEnchants;
 
+import java.util.Collection;
 import java.util.Random;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class GamblerEvent implements Listener {
+
+    /*
+        Overhaul the whole gambler enchantment.
+
+        Re-balance the drop chance of everything -> Coal shouldn't get a chance to do anything
+
+        Change enchantment to increase of decrease the amount of drops maybe multiply by a number like .75x or 1.25x
+        based on random chance
+
+     */
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event){
@@ -22,108 +34,33 @@ public class GamblerEvent implements Listener {
 
         Block block = event.getBlock();
         Random random = new Random();
-        event.setDropItems(false);
 
         // get the blocks location
         Location location = block.getLocation();
         World world = block.getWorld();
 
-        int chance = random.nextInt(100) + 1;
-
+        // if the broken block is any of the below run the code, else break;
         switch(block.getType()){
             case DIAMOND_ORE:
-                // when mined has a 30% chance to drop a diamond 5% chance to drop block 65% iron ore
-                if(chance <= 10){
-                    world.dropItemNaturally(location, new ItemStack(Material.DIAMOND_BLOCK, 1));
-                } else {
-                    dropCoal(world, location);
-                }
-                break;
-            case IRON_ORE:
-                if(chance <= 1){
-                    dropDiamond(world, location);
-                } else if(chance <= 10){
-                    dropIron(world, location);
-                } else{
-                    dropCoal(world, location);
-                }
-                break;
-            case GOLD_ORE:
-                if(chance <= 1){
-                    dropDiamond(world, location);
-                } else if(chance <= 10){
-                    dropGold(world, location);
-                } else{
-                    dropCoal(world, location);
-                }
-                break;
-            case NETHER_GOLD_ORE:
-                if(chance <= 1){
-                    world.dropItemNaturally(location, new ItemStack(Material.NETHERITE_SCRAP, 1));
-                } else if (chance <= 10){
-                    dropGold(world, location);
-                } else{
-                    dropCoal(world, location);
-                }
             case COAL_ORE:
-                if(chance <= 1){
-                    dropDiamond(world, location);
-                } else{
-                    dropCoal(world, location);
-                }
-                break;
             case EMERALD_ORE:
-                if(chance <= 1){
-                    world.dropItemNaturally(location, new ItemStack(Material.EMERALD_BLOCK, 1));
-                } else if(chance <= 10){
-                    world.dropItemNaturally(location, new ItemStack(Material.EMERALD, 1));
-                } else{
-                    dropIron(world, location);
-                }
-                break;
             case LAPIS_ORE:
-                if(chance <= 1){
-                    dropDiamond(world, location);
-                } else if(chance <= 10){
-                    world.dropItemNaturally(location, new ItemStack(Material.LAPIS_LAZULI, 3));
-                } else{
-                    dropCoal(world, location);
-                }
-                break;
             case REDSTONE_ORE:
-                if(chance <= 1){
-                    dropDiamond(world, location);
-                } else if(chance <= 10){
-                    world.dropItemNaturally(location, new ItemStack(Material.REDSTONE, 4));
-                } else{
-                    dropCoal(world, location);
-                }
-                break;
             case NETHER_QUARTZ_ORE:
-                if(chance <= 1){
-                    world.dropItemNaturally(location, new ItemStack(Material.NETHERITE_SCRAP, 1));
-                } else if(chance <= 10){
-                    world.dropItemNaturally(location, new ItemStack(Material.QUARTZ, 3));
-                } else{
-                    dropCoal(world, location);
-                }
+                event.setDropItems(false); // set the default drops to false -> doesn't drop normal shit
+                Collection<ItemStack> drops = event.getBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand());
+                ItemStack drop = drops.iterator().next(); // store the first (only) drop from the getDrops collection
+
+                double multiplier = 0.5 + (1.75 - 0.5) * random.nextDouble(); // store the multiplier that will be used
+                double newQuantity = drop.getAmount() * multiplier; // store the new amount of drops
+
+                if((int) newQuantity == 0) break; // if there isn't any resulting drops break
+
+                // Create item and drop it in the world -> cast the double to int
+                world.dropItemNaturally(location, new ItemStack(drop.getType(), ((int) newQuantity)));
+            default:
                 break;
         }
     }
 
-    public void dropGold(World world, Location location){
-        world.dropItemNaturally(location, new ItemStack(Material.GOLD_ORE, 1));
-    }
-
-    public void dropDiamond(World world, Location location){
-        world.dropItemNaturally(location, new ItemStack(Material.DIAMOND, 1));
-    }
-
-    public void dropCoal(World world, Location location){
-        world.dropItemNaturally(location, new ItemStack(Material.COAL, 1));
-    }
-
-    public void dropIron(World world, Location location){
-        world.dropItemNaturally(location, new ItemStack(Material.IRON_ORE, 1));
-    }
 }

@@ -14,6 +14,11 @@ import shittysituations.customenchantments.CustomEnchants;
 
 public class SmeltEvent implements Listener {
 
+    /*
+        Change how drop is defined -> it doesn't account for fortune when smelting, drop should be a collection of drops
+        returned from block.getDrops(mainHandItem);
+     */
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event){
         Player player = event.getPlayer();

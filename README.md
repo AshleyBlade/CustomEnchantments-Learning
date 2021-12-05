@@ -12,7 +12,7 @@ The enchantments that currently work:
     Vacuum - Apply to pickaxe, sucks items into player inventory.
     Smelt - Smelts blocks upon breaking, works with fortune!
     Dash - Applies to a sword, when right clicking you dash forwards.
-    Cockatrice - When right clicing spawns a chicken that hunts mobs and explodes when close to them!
+    Cockatrice - When right clicking spawns a chicken that chases mobs and explodes when close to them!
     Gambler - When mining multiplies the drops by a random double between 0.5 and 1.75.
 
 The enchantments that are being worked on :
